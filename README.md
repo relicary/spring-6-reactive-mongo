@@ -23,3 +23,23 @@ public class MongoConfig extends AbstractReactiveMongoConfiguration {
     }
 }
 ```
+
+## How to add the basic Mongo Authentication
+
+Inside the `MongoConfig` class, override the next method:
+
+```java
+@Override
+protected void configureClientSettings(MongoClientSettings.Builder builder) {
+    builder.credential(MongoCredential.createCredential("root","admin", "example".toCharArray()))
+            .applyToClusterSettings(settings -> settings.hosts(
+                    (
+                            Collections.singletonList(
+                                    new ServerAddress("localhost", 27017)
+                            )
+                    )
+            ));
+}
+```
+
+Using the default MongoDB credentials
