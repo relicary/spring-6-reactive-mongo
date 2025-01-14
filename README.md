@@ -4,3 +4,22 @@ This project is based on the examples given by [John Thompson](https://github.co
 
 **Section 31:** Spring Data MongoDB
 
+## How to add the basic Mongo Configuration
+
+A `@Configuration` class must be created with the next code:
+
+```java
+@Configuration
+public class MongoConfig extends AbstractReactiveMongoConfiguration {
+
+    @Bean
+    public MongoClient mongoClient() {
+        return MongoClients.create();
+    }
+
+    @Override
+    protected String getDatabaseName() {
+        return "my-db-name";
+    }
+}
+```
