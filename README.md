@@ -41,5 +41,3 @@ protected void configureClientSettings(MongoClientSettings.Builder builder) {
             ));
 }
 ```
-
-Using the default MongoDB credentials
