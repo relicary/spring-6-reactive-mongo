@@ -41,3 +41,7 @@ protected void configureClientSettings(MongoClientSettings.Builder builder) {
             ));
 }
 ```
+
+## About testing Mono and Flux
+
+The class `AtomicReference` is a good way for testing the Reactive responses but there are better ways.

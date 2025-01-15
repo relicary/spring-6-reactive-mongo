@@ -1,12 +1,12 @@
 package com.relicary.reactive_mongo.services.impl;
 
-import com.relicary.reactive_mongo.domain.Beer;
 import com.relicary.reactive_mongo.mappers.BeerMapper;
 import com.relicary.reactive_mongo.model.BeerDTO;
 import com.relicary.reactive_mongo.repositories.BeerRepository;
 import com.relicary.reactive_mongo.services.BeerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -17,6 +17,20 @@ public class BeerServiceImpl implements BeerService {
     private final BeerRepository beerRepository;
 
     @Override
+    public Flux<BeerDTO> listBeers() {
+        return beerRepository
+                .findAll()
+                .map(beerMapper::beerToBeerDto);
+    }
+
+    @Override
+    public Mono<BeerDTO> getById(String beerId) {
+        return beerRepository
+                .findById(beerId)
+                .map(beerMapper::beerToBeerDto);
+    }
+
+    @Override
     public Mono<BeerDTO> saveBeer(Mono<BeerDTO> beerDTO) {
         return beerDTO
                 .map(beerMapper::beerDtoToBeer)
@@ -25,7 +39,24 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Mono<Beer> getById(String beerId) {
+    public Mono<BeerDTO> saveBeer(BeerDTO beerDTO) {
+        return beerRepository
+                .save(beerMapper.beerDtoToBeer(beerDTO))
+                .map(beerMapper::beerToBeerDto);
+    }
+
+    @Override
+    public Mono<BeerDTO> updateBeer(String beerId, BeerDTO beerDTO) {
         return null;
+    }
+
+    @Override
+    public Mono<BeerDTO> patchBeer(String beerId, BeerDTO beerDTO) {
+        return null;
+    }
+
+    @Override
+    public Mono<Void> deleteBeerById(String beerId) {
+        return beerRepository.deleteById(beerId);
     }
 }
