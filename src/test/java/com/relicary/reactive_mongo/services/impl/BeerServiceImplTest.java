@@ -38,6 +38,17 @@ class BeerServiceImplTest {
     }
 
     @Test
+    void findFirstByBeerNameTest() {
+        BeerDTO beerDto = getSavedBeerDto();
+
+        Mono<BeerDTO> foundBeerDto = beerService.findFirstByBeerName(beerDto.getBeerName());
+
+        foundBeerDto.subscribe(beerDTO -> {
+            log.info(beerDTO.toString());
+        });
+    }
+
+    @Test
     @DisplayName("Test Save Beer Using Subscriber")
     void saveBeerUseSubscriber() {
 
