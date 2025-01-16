@@ -42,6 +42,11 @@ protected void configureClientSettings(MongoClientSettings.Builder builder) {
 }
 ```
 
+## Versiong Tags
+
+`0.1.0:` A version which uses Docker as temporal container for the Test execution
+`0.2.0:` A version which uses Docker Compose to create a MongoDB and run the App
+
 ## Query Methods
 
 In this [link](https://docs.spring.io/spring-data/mongodb/docs/current-SNAPSHOT/reference/html/#mongodb.repositories.queries) can be seen the keywords to declare query methods in signature.
