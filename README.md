@@ -42,10 +42,16 @@ protected void configureClientSettings(MongoClientSettings.Builder builder) {
 }
 ```
 
+## WebFlux.fn
+
+* It is a `Spring WebFlux` functionality
+* It lets use functions instead `@RestController` or `@RequestMapping` to define routes
+
 ## Versiong Tags
 
 `0.1.0:` A version which uses Docker as temporal container for the Test execution
 `0.2.0:` A version which uses Docker Compose to create a MongoDB and run the App
+`1.0.0:` First MongoDB version finished
 
 ## Query Methods
 
