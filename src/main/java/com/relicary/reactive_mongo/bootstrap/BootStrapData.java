@@ -3,6 +3,7 @@ package com.relicary.reactive_mongo.bootstrap;
 import com.relicary.reactive_mongo.domain.Beer;
 import com.relicary.reactive_mongo.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class BootStrapData implements CommandLineRunner {
 
     private final BeerRepository beerRepository;
@@ -58,9 +60,9 @@ public class BootStrapData implements CommandLineRunner {
                         .lastModifiedDate(LocalDateTime.now())
                         .build();
 
-                beerRepository.save(beer1).subscribe();
-                beerRepository.save(beer2).subscribe();
-                beerRepository.save(beer3).subscribe();
+                beerRepository.save(beer1).subscribe(b -> log.info(b.toString()));
+                beerRepository.save(beer2).subscribe(b -> log.info(b.toString()));
+                beerRepository.save(beer3).subscribe(b -> log.info(b.toString()));
             }
         });
     }
