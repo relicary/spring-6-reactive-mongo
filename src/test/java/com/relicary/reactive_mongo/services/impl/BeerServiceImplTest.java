@@ -11,10 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.containers.MongoDBContainer;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -24,14 +20,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-@Testcontainers
 @SpringBootTest
 @Slf4j
-class BeerServiceImplTest {
-
-    @Container
-    @ServiceConnection
-    public static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:latest");
+public class BeerServiceImplTest {
 
     @Autowired
     BeerService beerService;
