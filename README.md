@@ -42,6 +42,10 @@ protected void configureClientSettings(MongoClientSettings.Builder builder) {
 }
 ```
 
+## Query Methods
+
+In this [link](https://docs.spring.io/spring-data/mongodb/docs/current-SNAPSHOT/reference/html/#mongodb.repositories.queries) can be seen the keywords to declare query methods in signature.
+
 ## About testing Mono and Flux
 
 The class `AtomicReference` is a good way for testing the Reactive responses but there are better ways.

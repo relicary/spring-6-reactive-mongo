@@ -10,6 +10,8 @@ public interface BeerService {
 
     Mono<BeerDTO> findFirstByBeerName(String beerName);
 
+    Flux<BeerDTO> findByBeerStyle(String beerStyle);
+
     Mono<BeerDTO> getById(String beerId);
 
     Mono<BeerDTO> saveBeer(Mono<BeerDTO> beerDTO);
