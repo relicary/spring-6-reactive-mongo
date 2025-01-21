@@ -53,6 +53,16 @@ class BeerEndpointTest {
     }
 
     @Test
+    void testGetBeerByIdNotFound() {
+        webTestClient.get()
+                .uri(BeerRouterConfig.BEER_PATH_ID, Integer.MAX_VALUE)
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(BeerDTO.class);
+    }
+
+    @Test
     void testCreateBeer() {
         BeerDTO beerDto = getSavedTestBeer();
 
@@ -79,6 +89,15 @@ class BeerEndpointTest {
     }
 
     @Test
+    void testUpdateBeerNotFound() {
+        webTestClient.put()
+                .uri(BeerRouterConfig.BEER_PATH_ID, Integer.MAX_VALUE)
+                .body(Mono.just(BeerServiceImplTest.getTestBeer()), BeerDTO.class)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testPatchIdFound() {
         BeerDTO beerDTO = getSavedTestBeer();
 
@@ -90,6 +109,15 @@ class BeerEndpointTest {
     }
 
     @Test
+    void testPatchIdNotFound() {
+        webTestClient.patch()
+                .uri(BeerRouterConfig.BEER_PATH_ID, Integer.MAX_VALUE)
+                .body(Mono.just(BeerServiceImplTest.getTestBeer()), BeerDTO.class)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testDeleteBeer() {
         BeerDTO beerDTO = getSavedTestBeer();
 
@@ -97,6 +125,14 @@ class BeerEndpointTest {
                 .uri(BeerRouterConfig.BEER_PATH_ID, beerDTO.getId())
                 .exchange()
                 .expectStatus().isNoContent();
+    }
+
+    @Test
+    void testDeleteNotFound() {
+        webTestClient.delete()
+                .uri(BeerRouterConfig.BEER_PATH_ID, Integer.MAX_VALUE)
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
     public BeerDTO getSavedTestBeer(){
