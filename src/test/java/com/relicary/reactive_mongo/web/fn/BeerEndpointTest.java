@@ -89,6 +89,16 @@ class BeerEndpointTest {
                 .expectStatus().isNoContent();
     }
 
+    @Test
+    void testDeleteBeer() {
+        BeerDTO beerDTO = getSavedTestBeer();
+
+        webTestClient.delete()
+                .uri(BeerRouterConfig.BEER_PATH_ID, beerDTO.getId())
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
     public BeerDTO getSavedTestBeer(){
         FluxExchangeResult<BeerDTO> beerDTOFluxExchangeResult = webTestClient.post()
                 .uri(BeerRouterConfig.BEER_PATH)
