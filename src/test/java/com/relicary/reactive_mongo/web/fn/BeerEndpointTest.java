@@ -68,12 +68,12 @@ class BeerEndpointTest {
     public BeerDTO getSavedTestBeer(){
         FluxExchangeResult<BeerDTO> beerDTOFluxExchangeResult = webTestClient.post()
                 .uri(BeerRouterConfig.BEER_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(BeerServiceImplTest.getTestBeer()), BeerDTO.class)
-                .header("Content-Type", "application/json")
                 .exchange()
                 .returnResult(BeerDTO.class);
 
-        List<String> location = beerDTOFluxExchangeResult.getResponseHeaders().get("Location");
+        List<String> location = beerDTOFluxExchangeResult.getResponseHeaders().get(HttpHeaders.LOCATION);
 
         return webTestClient.get().uri(BeerRouterConfig.BEER_PATH)
                 .exchange().returnResult(BeerDTO.class).getResponseBody().blockFirst();
