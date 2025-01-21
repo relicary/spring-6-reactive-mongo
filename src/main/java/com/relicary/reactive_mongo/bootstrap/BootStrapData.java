@@ -1,7 +1,9 @@
 package com.relicary.reactive_mongo.bootstrap;
 
 import com.relicary.reactive_mongo.domain.Beer;
+import com.relicary.reactive_mongo.domain.Customer;
 import com.relicary.reactive_mongo.repositories.BeerRepository;
+import com.relicary.reactive_mongo.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -16,13 +18,15 @@ import java.time.LocalDateTime;
 public class BootStrapData implements CommandLineRunner {
 
     private final BeerRepository beerRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public void run(String... args) throws Exception {
         beerRepository.deleteAll()
-                .doOnSuccess(success ->
-                    loadBeerData()
-                )
+                .doOnSuccess(success -> {
+                    loadBeerData();
+                    loadCustomerData();
+                })
                 .subscribe();
     }
 
@@ -63,6 +67,33 @@ public class BootStrapData implements CommandLineRunner {
                 beerRepository.save(beer1).subscribe(b -> log.info(b.toString()));
                 beerRepository.save(beer2).subscribe(b -> log.info(b.toString()));
                 beerRepository.save(beer3).subscribe(b -> log.info(b.toString()));
+            }
+        });
+    }
+
+    private void loadCustomerData() {
+        beerRepository.count().subscribe(count -> {
+            if (count == 0) {
+
+                Customer customer1 = Customer.builder()
+                        .customerName("Alicia Argento")
+                        .createdDate(LocalDateTime.now())
+                        .lastModifiedDate(LocalDateTime.now())
+                        .build();
+
+                Customer customer2 = Customer.builder()
+                        .customerName("Benito Borrego")
+                        .createdDate(LocalDateTime.now())
+                        .lastModifiedDate(LocalDateTime.now())
+                        .build();
+
+                Customer customer3 = Customer.builder()
+                        .customerName("Carlos Cerezo")
+                        .build();
+
+                customerRepository.save(customer1).subscribe(b -> log.info(b.toString()));
+                customerRepository.save(customer2).subscribe(b -> log.info(b.toString()));
+                customerRepository.save(customer3).subscribe(b -> log.info(b.toString()));
             }
         });
     }
