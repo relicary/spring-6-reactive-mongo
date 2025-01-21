@@ -9,6 +9,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -49,6 +50,19 @@ class BeerEndpointTest {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(BeerDTO.class);
+    }
+
+    @Test
+    void testCreateBeer() {
+        BeerDTO beerDto = getSavedTestBeer();
+
+        webTestClient.post()
+                .uri(BeerRouterConfig.BEER_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(beerDto)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectHeader().exists(HttpHeaders.LOCATION);
     }
 
     public BeerDTO getSavedTestBeer(){
