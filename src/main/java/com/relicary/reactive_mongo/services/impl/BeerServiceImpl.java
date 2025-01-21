@@ -6,6 +6,7 @@ import com.relicary.reactive_mongo.repositories.BeerRepository;
 import com.relicary.reactive_mongo.services.BeerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -81,7 +82,35 @@ public class BeerServiceImpl implements BeerService {
 
     @Override
     public Mono<BeerDTO> patchBeer(String beerId, BeerDTO beerDTO) {
-        return null;
+        return beerRepository.findById(beerId)
+                .map(beer -> {
+                    if(StringUtils.hasText(beerDTO.getBeerName())){
+                        beer.setBeerName(beerDTO.getBeerName());
+                    }
+
+                    if(StringUtils.hasText(beerDTO.getBeerStyle())){
+                        beer.setBeerStyle(beerDTO.getBeerStyle());
+                    }
+
+                    if(beerDTO.getPrice() != null){
+                        beer.setPrice(beerDTO.getPrice());
+                    }
+
+                    if(StringUtils.hasText(beerDTO.getUpc())){
+                        beer.setUpc(beerDTO.getUpc());
+                    }
+
+                    if(beerDTO.getQuantityOnHand() != null){
+                        beer.setQuantityOnHand(beerDTO.getQuantityOnHand());
+                    }
+                    return beer;
+                })
+                .flatMap(
+                        beerRepository::save
+                )
+                .map(
+                        beerMapper::beerToBeerDto
+                );
     }
 
     @Override
