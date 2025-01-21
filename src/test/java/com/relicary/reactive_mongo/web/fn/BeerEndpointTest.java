@@ -14,10 +14,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -37,6 +39,28 @@ class BeerEndpointTest {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody().jsonPath("$.size()").value(greaterThan(1));
+    }
+
+    @Test
+    void testListBeersByStyle() {
+        final String BEER_STYLE = "Test";
+        BeerDTO beerDTO = getSavedTestBeer();
+        beerDTO.setBeerStyle(BEER_STYLE);
+
+        webTestClient.post()
+                .uri(BeerRouterConfig.BEER_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(beerDTO)
+                .exchange();
+
+        webTestClient.get()
+                .uri(
+                        UriComponentsBuilder.fromPath(BeerRouterConfig.BEER_PATH).queryParam("beerStyle", BEER_STYLE).build().toUri()
+                )
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody().jsonPath("$.size()").value(equalTo(1));
     }
 
     @Test
