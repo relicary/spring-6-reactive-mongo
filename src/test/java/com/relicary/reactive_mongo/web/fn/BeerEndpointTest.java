@@ -1,5 +1,6 @@
 package com.relicary.reactive_mongo.web.fn;
 
+import com.relicary.reactive_mongo.domain.Beer;
 import com.relicary.reactive_mongo.model.BeerDTO;
 import com.relicary.reactive_mongo.services.impl.BeerServiceImplTest;
 import org.junit.jupiter.api.MethodOrderer;
@@ -76,6 +77,18 @@ class BeerEndpointTest {
     }
 
     @Test
+    void testCreateBeerBadData() {
+        Beer testBeer = BeerServiceImplTest.getTestBeer();
+        testBeer.setBeerName("");
+
+        webTestClient.post().uri(BeerRouterConfig.BEER_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(testBeer)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
     @Order(3)
     void testUpdateBeer() {
         BeerDTO beerDTO = getSavedTestBeer();
@@ -90,11 +103,27 @@ class BeerEndpointTest {
 
     @Test
     void testUpdateBeerNotFound() {
+
+        Beer beer = BeerServiceImplTest.getTestBeer();
+
         webTestClient.put()
                 .uri(BeerRouterConfig.BEER_PATH_ID, Integer.MAX_VALUE)
-                .body(Mono.just(BeerServiceImplTest.getTestBeer()), BeerDTO.class)
+                .bodyValue(beer)
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(4)
+    void testUpdateBeerBadRequest() {
+        BeerDTO testBeer = getSavedTestBeer();
+        testBeer.setBeerStyle("");
+
+        webTestClient.put()
+                .uri(BeerRouterConfig.BEER_PATH_ID, testBeer)
+                .bodyValue(testBeer)
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
     @Test
@@ -115,6 +144,18 @@ class BeerEndpointTest {
                 .body(Mono.just(BeerServiceImplTest.getTestBeer()), BeerDTO.class)
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    void testPatchBeerBadData() {
+        BeerDTO testBeer = getSavedTestBeer();
+        testBeer.setBeerStyle("");
+
+        webTestClient.patch().uri(BeerRouterConfig.BEER_PATH_ID, Integer.MAX_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(testBeer)
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
     @Test
