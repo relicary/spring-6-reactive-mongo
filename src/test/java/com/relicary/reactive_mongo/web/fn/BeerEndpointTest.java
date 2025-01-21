@@ -65,6 +65,19 @@ class BeerEndpointTest {
                 .expectHeader().exists(HttpHeaders.LOCATION);
     }
 
+    @Test
+    @Order(3)
+    void testUpdateBeer() {
+        BeerDTO beerDTO = getSavedTestBeer();
+        beerDTO.setBeerName("New");
+
+        webTestClient.put()
+                .uri(BeerRouterConfig.BEER_PATH_ID, beerDTO.getId())
+                .bodyValue(beerDTO)
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
     public BeerDTO getSavedTestBeer(){
         FluxExchangeResult<BeerDTO> beerDTOFluxExchangeResult = webTestClient.post()
                 .uri(BeerRouterConfig.BEER_PATH)
